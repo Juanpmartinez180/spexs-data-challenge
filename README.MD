@@ -23,3 +23,24 @@ Para el modelo de datos, se abordo una arquitectura del tipo Medallion, compuest
 - Gold layer: Datos listos para el consumo, agregaciones alineadas a las reglas de negocios, metricas y KPIs, calculos complejos.
 
 ![Alt text](./data/images/spexs-data-challenge(1).jpg)
+
+## 2. Estructura del repositorio
+
+    spexs-data-challenge/
+    ├── data/               # Almacenar archivos
+    ├── docker/             # Dockerfiles específicos
+    │   └── postgres/       # Scripts de inicialización de DB
+    ├── src/                # Código fuente principal
+    │   ├── api/            # Rutas y controladores de FastAPI
+    │   ├── core/           # Configuraciones globales y variables de entorno
+    │   ├── db/             # Conexión a la DB y modelos
+    │   ├── ingestion/      # Lógica de procesamiento de CSV y Bulk Inserts
+    │   ├── services/       # Lógica de negocio
+    │   └── utils/          # Helpers
+    ├── tests/              # Tests unitarios e integración
+    ├── .env.example        # Variables de entorno
+    ├── .gitignore          # Archivos a ignorar por GIT
+    ├── docker-compose.yml  # Orquestación local
+    ├── main.py             # Punto de entrada de la aplicación
+    ├── requirements.txt    # Dependencias del proyecto
+    └── README.md           # Documentación técnica
