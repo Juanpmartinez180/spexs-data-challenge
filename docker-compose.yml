@@ -13,15 +13,24 @@ services:
       - ./docker/postgres/init.sql:/docker-entrypoint-initdb.d/init.sql
       - postgres_data:/var/lib/postgresql/data
 
-  app:
+  api:
     build: .
-    container_name: spexs_app
-    volumes:
-      - .:/app
-    environment:
-      DATABASE_URL: postgresql://${DB_USER}:${DB_PASSWORD}@db:5432/${DB_NAME}
+    container_name: spexs_api
+    restart: always
+    ports:
+      - "8000:8000"
+    env_file: .env
     depends_on:
       - db
+  pipeline:
+    build: .
+    container_name: spexs_pipeline
+    env_file: .env
+    depends_on:
+      - db
+    command: ["python", "orchestrator.py"]
+    volumes:
+      - .:/app
 
 volumes:
   postgres_data:
