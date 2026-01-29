@@ -51,7 +51,7 @@ def run_silver_transformation():
                     datasource,
                     md5(region || LEFT(origin_coord, 10) || LEFT(destination_coord, 10) || date_trunc('hour', datetime::timestamp)::text)
                 FROM {source}
-                ON CONFLICT DO NOTHING; -- Evitar duplicados si el proceso se re-ejecuta
+                ON CONFLICT (similarity_key) DO NOTHING; -- Evitar duplicados si el proceso se re-ejecuta
             """
             
             cursor.execute(sql)
