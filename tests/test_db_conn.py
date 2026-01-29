@@ -7,7 +7,7 @@ load_dotenv()
 def test_connection():
     try:
         conn = psycopg2.connect(
-            host="localhost", # O "db" si corres el script dentro de Docker
+            host="localhost", # O "db" si el script esta dentro de Docker
             database=os.getenv("DB_NAME"),
             user=os.getenv("DB_USER"),
             password=os.getenv("DB_PASSWORD")
