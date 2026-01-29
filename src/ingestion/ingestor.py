@@ -12,21 +12,16 @@ load_dotenv()
 # Definir rutas de las carpetas
 LANDING_ZONE = "data/landing"
 ARCHIVE_ZONE = "data/archive"
-ingestion_config = [
-        {
-            "file": "data/cell_phone_trips.csv", 
-            "table": "bronze.cell_phone_data"
-        },
-        {
-            "file": "data/navigation_trips.csv", 
-            "table": "bronze.car_navigation_data"
-        },
-        {
-            "file": "data/app_logs.csv", 
-            "table": "bronze.app_usage_data"
-        }]
+ingestion_lookup = {
+    "cell_phone_trips.csv": "bronze.cell_phone_data",
+    "navigation_trips.csv": "bronze.car_navigation_data",
+    "app_logs.csv": "bronze.app_usage_data"
+}
 
 def get_db_connection():
+    """
+    Set up DB connection
+    """
     return psycopg2.connect(
         host="localhost",
         database=os.getenv("DB_NAME"),
@@ -54,14 +49,17 @@ def process_new_files():
         
         # Determinamos la tabla destino (puedes parametrizar esto por nombre de archivo)
         # Por ahora usaremos la tabla general de bronze
-        target_table = "bronze.cell_phone_data" 
-        
-        success = ingest_and_archive(input_path, target_table, archive_path)
-        
-        if success:
-            print(f"Archivo {file_name} procesado y movido a 'data/archive'.")
+        target_table = ingestion_lookup.get(file_name)
+
+        if target_table:
+            print(f"Iniciando ingesta: {file_name} -> {target_table}") 
+            success = ingest_and_archive(input_path, target_table, archive_path)
+            if success:
+                print(f"Archivo {file_name} procesado y movido a 'data/archive'.")
+            else:
+                print(f"Falló el procesamiento de {file_name}. Se mantiene en landing para revisión.")
         else:
-            print(f"Falló el procesamiento de {file_name}. Se mantiene en landing para revisión.")
+            print(f"El archivo '{file_name}' no está configurado para ingesta. Saltando...")
 
 def ingest_and_archive(file_path: str, table_name: str, archive_path: str):
     """
