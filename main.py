@@ -1,12 +1,7 @@
 from fastapi import FastAPI
 from src.ingestion.ingestor import ingest_csv_to_bronze
 from src.services.silver_transformers.trips_events import run_silver_transformation
-
-app = FastAPI()
-
-@app.get("/")
-def read_root():
-    return {"status": "Spexs Data Challenge API is running"}
+from src.services.gold_transformers.weekly_region_stats_fact import run_gold_transformation
 
 def run_pipeline():
     # Definición de fuentes y sus destinos
@@ -32,10 +27,15 @@ def run_pipeline():
 
     print("--- PIPELINE CSV->BRONZE FINALIZADO EXITOSAMENTE ---")
 
-    # Ejecutar Silver inmediatamente después (Dependencia)
+    # Ejecutar Silver ingestion
     run_silver_transformation()
 
     print("--- PIPELINE BRONZE->SILVER FINALIZADO EXITOSAMENTE ---")
+
+    # Ejecutar Silver ingestion
+    run_gold_transformation()
+
+    print("--- PIPELINE SILVER->GOLD FINALIZADO EXITOSAMENTE ---")
 
 if __name__ == "__main__":
     run_pipeline()
