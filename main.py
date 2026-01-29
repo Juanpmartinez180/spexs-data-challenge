@@ -1,39 +1,23 @@
 from fastapi import FastAPI
-from src.ingestion.ingestor import ingest_csv_to_bronze
+from src.ingestion.ingestor import process_new_files
 from src.services.silver_transformers.trips_events import run_silver_transformation
-from src.services.gold_transformers.weekly_region_stats_fact import run_gold_transformation
+#from src.services.gold_transformers.weekly_region_stats_fact import run_gold_transformation
+from src.services.gold_transformers import weekly_region_stats_fact, events_fact
 
 def run_pipeline():
-    # Definición de fuentes y sus destinos
-    ingestion_config = [
-        {
-            "file": "data/cell_phone_trips.csv", 
-            "table": "bronze.cell_phone_data"
-        },
-        {
-            "file": "data/navigation_trips.csv", 
-            "table": "bronze.car_navigation_data"
-        },
-        {
-            "file": "data/app_logs.csv", 
-            "table": "bronze.app_usage_data"
-        }
-    ]
-    # Ejecutar Bronze ingestion
     print("--- INICIANDO PIPELINE DE DATOS SPEXS ---")
-    
-    for source in ingestion_config:
-        ingest_csv_to_bronze(source["file"], source["table"])
 
+    # Ejecutar Bronze ingestion
+    process_new_files()
     print("--- PIPELINE CSV->BRONZE FINALIZADO EXITOSAMENTE ---")
 
     # Ejecutar Silver ingestion
     run_silver_transformation()
-
     print("--- PIPELINE BRONZE->SILVER FINALIZADO EXITOSAMENTE ---")
 
-    # Ejecutar Silver ingestion
-    run_gold_transformation()
+    # Ejecutar Gold ingestion
+    #weekly_region_stats_fact.run_transformation_task()
+    events_fact.run_transformation_task()
 
     print("--- PIPELINE SILVER->GOLD FINALIZADO EXITOSAMENTE ---")
 
