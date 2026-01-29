@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from src.ingestion.ingestor import ingest_csv_to_bronze
-from src.services.silver_transformer import run_silver_transformation
+from src.services.silver_transformers.trips_events import run_silver_transformation
 
 app = FastAPI()
 
@@ -24,7 +24,7 @@ def run_pipeline():
             "table": "bronze.app_usage_data"
         }
     ]
-
+    # Ejecutar Bronze ingestion
     print("--- INICIANDO PIPELINE DE DATOS SPEXS ---")
     
     for source in ingestion_config:
@@ -32,7 +32,7 @@ def run_pipeline():
 
     print("--- PIPELINE CSV->BRONZE FINALIZADO EXITOSAMENTE ---")
 
-    # 2. Ejecutar Silver inmediatamente después (Dependencia)
+    # Ejecutar Silver inmediatamente después (Dependencia)
     run_silver_transformation()
 
     print("--- PIPELINE BRONZE->SILVER FINALIZADO EXITOSAMENTE ---")
