@@ -1,0 +1,45 @@
+{
+	"info": {
+		"_postman_id": "a115aac7-9ce9-4f12-b52c-7c07cc8993f9",
+		"name": "spexs-challenge-api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "51939108",
+		"_collection_link": "https://juanpmartinez180-656617.postman.co/workspace/Juan-Pablo-Martinez's-Workspace~1bde6dd4-2d0c-4f20-8b94-510d49affaf0/collection/51939108-a115aac7-9ce9-4f12-b52c-7c07cc8993f9?action=share&source=collection_link&creator=51939108"
+	},
+	"item": [
+		{
+			"name": "stats",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8000/stats?region=Turin&week=21&year=2018#",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"stats"
+					],
+					"query": [
+						{
+							"key": "region",
+							"value": "Turin"
+						},
+						{
+							"key": "week",
+							"value": "21"
+						},
+						{
+							"key": "year",
+							"value": "2018"
+						}
+					],
+					"hash": ""
+				}
+			},
+			"response": []
+		}
+	]
+}
