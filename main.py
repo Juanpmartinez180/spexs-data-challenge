@@ -1,6 +1,5 @@
 from src.ingestion.ingestor import process_new_files
 from src.services.silver_transformers.trips_events import run_silver_transformation
-#from src.services.gold_transformers.weekly_region_stats_fact import run_gold_transformation
 from src.services.gold_transformers import weekly_region_stats_fact, events_fact, geolocation_dim
 
 def run_pipeline():
