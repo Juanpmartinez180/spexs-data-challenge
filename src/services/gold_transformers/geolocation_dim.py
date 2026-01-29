@@ -5,16 +5,12 @@ from datetime import datetime
 from dotenv import load_dotenv
 from geopy.geocoders import Nominatim
 import time
+from src.utils.db_settings import get_db_connection
 
 load_dotenv()
 
 def run_transformation_task():
-    conn = psycopg2.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
+    conn = get_db_connection()
     cursor = conn.cursor()
     log_id = str(uuid.uuid4())
     start_time = datetime.now()

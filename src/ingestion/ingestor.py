@@ -6,6 +6,7 @@ import io
 from datetime import datetime
 from dotenv import load_dotenv
 import uuid
+from src.utils.db_settings import get_db_connection
 
 load_dotenv()
 
@@ -18,17 +19,6 @@ ingestion_lookup = {
     "app_logs.csv": "bronze.app_usage_data"
 }
 
-def get_db_connection():
-    """
-    Set up DB connection
-    """
-    return psycopg2.connect(
-        host="localhost",
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
-
 def process_new_files():
     """
     Escanear la carpeta Landing, procesar los archivos y archivarlos
@@ -39,7 +29,7 @@ def process_new_files():
     # Listar archivos CSV en la landing zone
     files = [f for f in os.listdir(LANDING_ZONE) if f.endswith('.csv')]
     if not files:
-        print("No hay archivos nuevos en 'data/new_datasets'. Pipeline en espera.")
+        print(f"No hay archivos nuevos en {LANDING_ZONE}. Pipeline en espera.")
         return
     print(f"Se encontraron {len(files)} archivos nuevos. Iniciando ingesta...")
 

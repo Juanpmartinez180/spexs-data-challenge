@@ -3,6 +3,7 @@ import os
 import uuid
 from datetime import datetime
 from dotenv import load_dotenv
+from src.utils.db_settings import get_db_connection
 
 load_dotenv()
 
@@ -15,12 +16,7 @@ def run_silver_transformation():
     ]
     table_name = "silver.trips_enriched"
 
-    conn = psycopg2.connect(
-        host=os.getenv("DB_HOST", "localhost"),
-        database=os.getenv("DB_NAME"),
-        user=os.getenv("DB_USER"),
-        password=os.getenv("DB_PASSWORD")
-    )
+    conn = get_db_connection()
     cursor = conn.cursor()
 
     # Audit logs setup
