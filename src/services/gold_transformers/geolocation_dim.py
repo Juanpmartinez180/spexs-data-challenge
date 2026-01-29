@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-def run_transformation_task():
+def run_gold_transformation():
     conn = psycopg2.connect(
         host=os.getenv("DB_HOST", "localhost"),
         database=os.getenv("DB_NAME"),
@@ -16,7 +16,7 @@ def run_transformation_task():
     cursor = conn.cursor()
     log_id = str(uuid.uuid4())
     start_time = datetime.now()
-    target_table = "gold.weekly_region_stats_fact"
+    target_table = "gold.geolocation_dim"
     source_tables = "silver.trips_events"
 
     print(f"Cargando {target_table}")
@@ -31,19 +31,15 @@ def run_transformation_task():
         # Agregación: Promedio semanal por región
         # Calculamos el total de viajes por semana y dividimos por 7
         sql = f"""
-            INSERT INTO {target_table} (region, week_number, year, avg_trips_daily, total_trips)
+            INSERT INTO {target_table} (region, country, region_bounding_box)
             SELECT 
                 region,
-                EXTRACT(WEEK FROM departure_time) as week_number,
-                EXTRACT(YEAR FROM departure_time) as year,
-                COUNT(*) / 7.0 as avg_trips_daily,
-                COUNT(*) as total_trips
+                country,
+                region_bounding_box
             FROM {source_tables}
-            GROUP BY region, year, week_number
-            ON CONFLICT (region, week_number, year) 
+            ON CONFLICT (region) 
             DO UPDATE SET
-                avg_trips_daily = EXCLUDED.avg_trips_daily,
-                total_trips = EXCLUDED.total_trips,
+                region_bounding_box = EXCLUDED.region_bounding_box,
                 last_updated = CURRENT_TIMESTAMP;
         """
         cursor.execute(sql)

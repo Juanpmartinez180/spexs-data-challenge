@@ -16,7 +16,7 @@ def run_transformation_task():
     cursor = conn.cursor()
     log_id = str(uuid.uuid4())
     start_time = datetime.now()
-    target_table = "gold.weekly_region_stats_fact"
+    target_table = "gold.events_fact"
     source_tables = "silver.trips_events"
 
     print(f"Cargando {target_table}")
@@ -31,20 +31,15 @@ def run_transformation_task():
         # Agregación: Promedio semanal por región
         # Calculamos el total de viajes por semana y dividimos por 7
         sql = f"""
-            INSERT INTO {target_table} (region, week_number, year, avg_trips_daily, total_trips)
+            INSERT INTO {target_table} (trip_id, origin_geohash, destination_geohash, region)
             SELECT 
-                region,
-                EXTRACT(WEEK FROM departure_time) as week_number,
-                EXTRACT(YEAR FROM departure_time) as year,
-                COUNT(*) / 7.0 as avg_trips_daily,
-                COUNT(*) as total_trips
+                trip_id,
+                origin_geohash, 
+                destination_geohash, 
+                region
             FROM {source_tables}
-            GROUP BY region, year, week_number
-            ON CONFLICT (region, week_number, year) 
-            DO UPDATE SET
-                avg_trips_daily = EXCLUDED.avg_trips_daily,
-                total_trips = EXCLUDED.total_trips,
-                last_updated = CURRENT_TIMESTAMP;
+            GROUP BY trip_id, origin_geohash, destination_geohash, region
+            ON CONFLICT DO NOTHING
         """
         cursor.execute(sql)
         records = cursor.rowcount
