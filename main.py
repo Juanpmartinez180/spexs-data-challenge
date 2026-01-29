@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 from src.ingestion.ingestor import ingest_csv_to_bronze
+from src.services.silver_transformer import run_silver_transformation
 
 app = FastAPI()
 
@@ -29,7 +30,12 @@ def run_pipeline():
     for source in ingestion_config:
         ingest_csv_to_bronze(source["file"], source["table"])
 
-    print("--- PIPELINE FINALIZADO EXITOSAMENTE ---")
+    print("--- PIPELINE CSV->BRONZE FINALIZADO EXITOSAMENTE ---")
+
+    # 2. Ejecutar Silver inmediatamente después (Dependencia)
+    run_silver_transformation()
+
+    print("--- PIPELINE BRONZE->SILVER FINALIZADO EXITOSAMENTE ---")
 
 if __name__ == "__main__":
     run_pipeline()
