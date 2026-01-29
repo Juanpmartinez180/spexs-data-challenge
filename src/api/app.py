@@ -23,14 +23,20 @@ def get_stats(region: str, week: int, year: int):
     conn = get_db()
     cursor = conn.cursor()
     cursor.execute("""
-        SELECT avg_trips_daily 
-        FROM gold.weekly_region_stats_fact
-        WHERE region = %s AND week_number = %s AND year = %s
+        SELECT wr.region,gd.country, wr.avg_trips_daily, gd.region_bounding_box
+        FROM gold.weekly_region_stats_fact wr
+        LEFT JOIN gold.geolocation_dim gd ON wr.region = gd.region
+        WHERE wr.region = %s AND wr.week_number = %s AND wr.year = %s
     """, (region, week, year))
+
     result = cursor.fetchone()
     cursor.close()
     conn.close()
-    return {"region": region, "weekly_avg": float(result[0]) if result else 'Region o periodo no encontrado.'}
+    return {"region": region,
+        "country":result[1], 
+        "weekly_avg": float(result[2]) if result else 'Region o periodo no encontrado.',
+        "bounding_box": result[3]
+    }
 
 @app.websocket("/ws/status")
 async def status_socket(websocket: WebSocket):
