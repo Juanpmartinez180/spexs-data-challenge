@@ -48,8 +48,11 @@ async def status_socket(websocket: WebSocket):
     cursor = conn.cursor()
     # ultimo estado de la tabla de auditoría
     cursor.execute(
-        "SELECT status, table_name FROM audit.ingestion_logs where table_name = 'gold.weekly_region_stats_fact' ORDER BY execution_start DESC LIMIT 1"
+        "SELECT status, table_name, execution_end FROM audit.ingestion_logs where table_name = 'gold.weekly_region_stats_fact' ORDER BY execution_start DESC LIMIT 1"
         )
     last_status = cursor.fetchone()
-    await websocket.send_json({"last_event": last_status[0], "table": last_status[1]})
+    await websocket.send_json({"last_event": last_status[0],
+        "table": last_status[1], 
+        "last_execution_on": str(last_status[2])}
+        )
     await websocket.close()
