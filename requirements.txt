@@ -6,3 +6,4 @@ pandas
 python-geohash
 python-dotenv
 websockets
+geopy
