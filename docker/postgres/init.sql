@@ -32,6 +32,28 @@ CREATE TABLE IF NOT EXISTS bronze.app_usage_data (
     layer TEXT DEFAULT 'bronze'
 );
 
+CREATE TABLE IF NOT EXISTS bronze.cell_phone_data (
+    region TEXT,
+    origin_coord TEXT,
+    destination_coord TEXT,
+    datetime TEXT,
+    datasource TEXT,
+    extracted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    layer TEXT DEFAULT 'bronze'
+);
+
+CREATE TABLE IF NOT EXISTS bronze.car_navigation_data (
+    region TEXT,
+    origin_coord TEXT,
+    destination_coord TEXT,
+    datetime TEXT,
+    datasource TEXT,
+    extracted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    layer TEXT DEFAULT 'bronze'
+);
+
 --- Silver tables
 CREATE TABLE IF NOT EXISTS silver.trips_events (
         trip_id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -55,7 +77,6 @@ CREATE TABLE IF NOT EXISTS gold.events_fact (
     last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     inserted_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     layer TEXT DEFAULT 'gold'
-    PRIMARY KEY (trip_id)
 );
 CREATE TABLE IF NOT EXISTS gold.weekly_region_stats_fact (
     region TEXT,
