@@ -10,7 +10,7 @@ def run_pipeline():
     print("--- PIPELINE CSV->BRONZE FINALIZADO EXITOSAMENTE ---")
 
     # Ejecutar Silver ingestion
-    run_silver_transformation()
+    '''run_silver_transformation()
     print("--- PIPELINE BRONZE->SILVER FINALIZADO EXITOSAMENTE ---")
 
     # Ejecutar Gold ingestion
@@ -18,7 +18,7 @@ def run_pipeline():
     events_fact.run_transformation_task()
     geolocation_dim.run_transformation_task()
 
-    print("--- PIPELINE SILVER->GOLD FINALIZADO EXITOSAMENTE ---")
+    print("--- PIPELINE SILVER->GOLD FINALIZADO EXITOSAMENTE ---")'''
 
 if __name__ == "__main__":
     run_pipeline()
