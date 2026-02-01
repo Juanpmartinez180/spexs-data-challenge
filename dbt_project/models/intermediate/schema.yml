@@ -1,0 +1,15 @@
+version: 2
+models:
+  - name: trips
+    description: "Silver layer - No duplicates or null values in PK columns"
+    columns:
+      - name: trip_id
+        tests:
+          - unique
+          - not_null
+      - name: region_name
+        tests:
+          - not_null
+      - name: datetime
+        tests:
+          - not_null
