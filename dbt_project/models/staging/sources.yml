@@ -1,0 +1,10 @@
+version: 2
+
+sources:
+  - name: bronze           # Este es el primer argumento de {{ source('bronze', ...) }}
+    database: challenge_db  # El nombre de tu base de datos en Postgres
+    schema: bronze         # El esquema donde viven los datos crudos
+    tables:
+      - name: cell_phone_data # El segundo argumento de {{ source(..., 'cell_phone_data') }}
+      - name: car_navigation_data
+      - name: app_usage_data
