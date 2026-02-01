@@ -38,6 +38,13 @@ services:
       - ./dbt_project/profiles.yml:/root/.dbt/profiles.yml #conection profiles
     working_dir: /usr/app
     env_file: .env
+    environment:
+      - DB_HOST=${DB_HOST}
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_PORT=${DB_PORT}
+      - DB_SCHEMA=${DB_SCHEMA:-silver}
     depends_on:
       - db
     profiles: ["tools"] #run only when it's required

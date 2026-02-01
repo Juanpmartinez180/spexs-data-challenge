@@ -3,11 +3,11 @@ dbt_project:
   outputs:
     dev:
       type: postgres
-      host: spexs_db
-      user: 
-      password: 
-      port: 5432
-      dbname: challenge_db
-      schema: silver
+      host: "{{ env_var('DB_HOST', 'db') }}"
+      user: "{{ env_var('DB_USER', 'usr') }}"
+      password: "{{ env_var('DB_PASSWORD', 'pwd') }}"
+      port: "{{ env_var('DB_PORT') | as_number }}"
+      dbname: "{{ env_var('DB_NAME', 'db') }}"
+      schema: "{{ env_var('DB_SCHEMA', 'sch') }}"
       threads: 4
   target: dev
