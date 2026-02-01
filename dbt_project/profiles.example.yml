@@ -1,0 +1,13 @@
+# Credenciales de conexion
+dbt_project:
+  outputs:
+    dev:
+      type: postgres
+      host: spexs_db
+      user: 
+      password: 
+      port: 5432
+      dbname: challenge_db
+      schema: silver
+      threads: 4
+  target: dev

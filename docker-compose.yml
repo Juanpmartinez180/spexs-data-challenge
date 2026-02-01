@@ -31,6 +31,17 @@ services:
     command: ["python", "orchestrator.py"]
     volumes:
       - .:/app
-
+  dbt:
+    image: ghcr.io/dbt-labs/dbt-postgres:1.5.0
+    volumes:
+      - ./dbt_project:/usr/app
+      - ./dbt_project/profiles.yml:/root/.dbt/profiles.yml #conection profiles
+    working_dir: /usr/app
+    env_file: .env
+    depends_on:
+      - db
+    profiles: ["tools"] #run only when it's required
+    ports:
+      - "8080:8080"
 volumes:
   postgres_data:
